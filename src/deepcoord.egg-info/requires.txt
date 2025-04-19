@@ -1,0 +1,13 @@
+coord-sim==2.2.1
+click==7.0
+numpy<1.19,>=1.16.5
+keras==2.2.5
+keras-rl==0.4.2
+tensorflow==1.14.0
+cloudpickle==1.2
+gym[atari]==0.14.0
+pandas==1.1.5
+h5py==2.10
+protobuf==3.20.3
+flake8
+nose2
