@@ -1,0 +1,9 @@
+2025-04-19 13:04:14,693 - root - INFO - Switching to testing mode
+2025-04-19 13:04:14,694 - root - INFO - load weights:./results/sample_agent/sample_network/abc/sample_config/2025-04-19_13-03-17_seed5247/weights
+2025-04-19 13:04:17,892 - root - INFO - Successfully loaded weights from ./results/sample_agent/sample_network/abc/sample_config/2025-04-19_13-03-17_seed5247/weights
+2025-04-19 13:04:17,893 - root - INFO - Starting test phase
+2025-04-19 13:04:19,741 - root - INFO - Test Episode 1/1 - Reward: 0.0
+2025-04-19 13:04:19,743 - root - INFO - Finished test phase
+2025-04-19 13:04:19,744 - root - INFO - FINISHED TEST
+2025-04-19 13:04:19,746 - root - INFO - writing result to file: ./results/sample_agent/sample_network/abc/sample_config/2025-04-19_13-03-17_seed5247/test-2025-04-19_13-03-17_seed5247/result.yaml
+2025-04-19 13:04:19,766 - root - INFO - See ./results/sample_agent/sample_network/abc/sample_config/2025-04-19_13-03-17_seed5247/test-2025-04-19_13-03-17_seed5247/test.log for INFO log output.

@@ -1,0 +1,97 @@
+agent_config:
+  episode_steps: 200
+  episodes: 1
+env_config:
+  network_file: ./results/sample_agent/sample_network/abc/sample_config/2025-04-19_13-03-17_seed5247/sample_network.graphml
+  reward_fnc: |2
+        def calculate_reward(self, simulator_state: SimulatorState) -> float:
+            """
+            Calculate reward per step based on the chosen objective.
+
+            :param simulator_state: Current simulator state
+            :return: The agent's reward
+            """
+            succ_ratio, flow_reward = self.get_flow_reward(simulator_state)
+            delay, delay_reward = self.get_delay_reward(simulator_state, succ_ratio)
+            nodes_reward = self.get_node_reward_shaped(simulator_state)
+            instance_reward = self.get_instance_reward(simulator_state)
+
+            # combine rewards based on chosen objective (and weights)
+            if self.objective == 'prio-flow':
+                nodes_reward = 0
+                instance_reward = 0
+                # prioritize flow reward and only optimize delay when the flow success target is met
+                # if the target is set to 'auto', use the EWMA instead
+                target = self.target_success
+                if self.target_success == 'auto':
+                    # hard-code "safety" value/thershold of 90%, could sth else
+                    target = 0.9 * self.ewma_flows
+                    # update exponentially weighted moving average (EWMA)
+                    self.update_ewma('flows', succ_ratio)
+                # as long as the target is not met, ignore delay and set it to -1
+                if succ_ratio < target:
+                    delay_reward = -1
+
+            elif self.objective == 'soft-deadline':
+                nodes_reward = 0
+                instance_reward = 0
+                # ensure flows reach their soft deadline as primary objective and ignore flow success until then
+                if delay > self.soft_deadline:
+                    flow_reward = -1
+                # after reaching the soft deadline, optimize flow success rather than further optimizing delay
+                else:
+                    # keep delay reward constant
+                    delay_reward = np.clip(-self.soft_deadline / self.network_diameter, -1, 1)
+
+            elif self.objective == 'soft-deadline-exp':
+                # example of more complex utility function, where the utility drops of exponentially if the avg. e2e delay
+                # exceeds the soft deadline
+                # utility function U(succ_ratio, delay) = succ_ratio * U_d(delay)
+                # U_d = constant 1 until deadline, then exp dropoff; then 0
+                # set both as delay reward; and flow and node reward to 0
+                flow_reward = 0
+                nodes_reward = 0
+                instance_reward = 0
+                # calc U_d (delay utility)
+                delay_utility = 1
+                if delay > self.soft_deadline:
+                    # drops of from 1 starting at the soft deadline down to 0 for configured dropoff duration
+                    delay_utility = -np.log10((1 / self.agent_config['dropoff']) * (delay - self.soft_deadline))
+                    # clip to >=0 in case delay even exceeds the acceptable extra delay (would otherwise be negative)
+                    delay_utility = np.clip(delay_utility, 0, 1)
+
+                # multiply with success ratio (not reward!; needs to be in [0,1]) to get total utility; set as delay reward
+                delay_reward = succ_ratio * delay_utility
+
+            elif self.objective == 'weighted':
+                # weight all objectives as configured before summing them
+                flow_reward *= self.agent_config['flow_weight']
+                delay_reward *= self.agent_config['delay_weight']
+                nodes_reward *= self.agent_config['node_weight']
+                instance_reward *= self.agent_config['instance_weight']
+
+            else:
+                raise ValueError(f"Unexpected objective {self.objective}. Must be in {SUPPORTED_OBJECTIVES}.")
+
+            # calculate and return the sum, ie, total reward
+            total_reward = flow_reward + delay_reward + nodes_reward + instance_reward
+            assert -4 <= total_reward <= 4, f"Unexpected total reward: {total_reward}."
+
+            logger.debug(f"Flow reward: {flow_reward}, success ratio: {succ_ratio}, target: {self.target_success}")
+            logger.debug(f"Delay reward: {delay_reward}, delay: {delay}, target: {self.soft_deadline}")
+            logger.debug(f"Nodes reward: {nodes_reward}")
+            logger.debug(f"Instance reward: {instance_reward}")
+            logger.debug(f"Total reward: {total_reward}, flow reward: {flow_reward}, delay reward: {delay_reward},"
+                         f"objective: {self.objective}")
+
+            return total_reward
+  seed: 5247
+  service_file: ./results/sample_agent/sample_network/abc/sample_config/2025-04-19_13-03-17_seed5247/abc.yaml
+  sim-seed: null
+  sim_config_file: ./results/sample_agent/sample_network/abc/sample_config/2025-04-19_13-03-17_seed5247/sample_config.yaml
+  simulator_cls: siminterface.Simulator
+episodes: 1
+id: 2025-04-19_13-03-17_seed5247
+log_file: ./results/sample_agent/sample_network/abc/sample_config/2025-04-19_13-03-17_seed5247/test-2025-04-19_13-03-17_seed5247/test.log
+runtime_process: 1.8498852999999968
+runtime_walltime: 1.8521888049999689

@@ -1,0 +1,10 @@
+2025-04-19 13:03:17,122 - root - INFO - Using Seed: 5247
+2025-04-19 13:03:17,253 - root - WARNING - Using weighted objective, but flow_weight not configured. Defaulting to flow_weight=0.
+2025-04-19 13:03:17,253 - root - WARNING - Using weighted objective, but delay_weight not configured. Defaulting to delay_weight=0.
+2025-04-19 13:03:17,254 - root - WARNING - Using weighted objective, but node_weight not configured. Defaulting to node_weight=0.
+2025-04-19 13:03:17,254 - root - WARNING - Using weighted objective, but instance_weight not configured. Defaulting to instance_weight=0.
+2025-04-19 13:03:20,328 - rlsp.envs.gym_env - INFO - min_delay: 15.0, max_delay: 45.0, diameter: 10
+2025-04-19 13:03:20,330 - rlsp.envs.gym_env - INFO - Observation space: ['ingress_traffic']
+2025-04-19 13:04:10,383 - root - INFO - Episode 1/1 - Reward: 0.0
+2025-04-19 13:04:10,384 - root - INFO - FINISHED TRAINING
+2025-04-19 13:04:10,388 - root - INFO - Saving weights to ./results/sample_agent/sample_network/abc/sample_config/2025-04-19_13-03-17_seed5247/weights
