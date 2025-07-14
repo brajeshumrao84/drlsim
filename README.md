@@ -24,6 +24,9 @@ pip install -U pip setuptools
 Install Dependencies
 To install drlsim, we recommend installing it from the source:
 
+# If you encounter issue while making the files, make sure you have all the dependencies resolved for cmake
+sudo apt install build-essential cmake pkg-config libjpeg-dev libtiff-dev libpng-dev libavcodec-dev libavformat-dev libswscale-dev libv4l-dev libxvidcore-dev libx264-dev libgtk-3-dev libatlas-base-dev gfortran python3-dev ninja-build
+
 # Install drlsim from the current repo
 pip install -e .
 This command also installs the required coord-sim simulation environment.
