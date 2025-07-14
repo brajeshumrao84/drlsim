@@ -43,7 +43,12 @@ nb_steps_warmup_actor: 200
 # for discounted return, when calculating the Q values and training the critic
 gamma: 0.99 # default 0.99
 # tau: for speed soft update of target actor and critic networks (higher is faster)
-target_model_update: 0.0001 # default 0.001
+target_model_update: 0.001 # default 0.001
+
+flow_weight: 1.0
+delay_weight: 1.0
+node_weight: 1.0
+instance_weight: 1.0
 
 # learning rate alpha: size of update steps during learning (too low -> slow convergence, too high -> divergence)
 learning_rate: 0.01 # default 0.001
