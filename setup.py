@@ -20,7 +20,7 @@ requirements = [
     'gym[atari]==0.14.0',
     'pandas==1.1.5',
     'h5py==2.10',
-    'protobuf==3.20.3'
+    'protobuf==3.19.6'
 ]
 
 test_requirements = [
